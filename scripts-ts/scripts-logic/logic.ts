@@ -1,16 +1,16 @@
 // Helpers
-enum carTypes {
+enum CarTypes {
   BRAND_NEW,
   USED,
 }
 
 let carTypeInterestRates = {
-  [carTypes.BRAND_NEW]: 2.99,
-  [carTypes.USED]: 3.7,
+  [CarTypes.BRAND_NEW]: 2.99,
+  [CarTypes.USED]: 3.7,
 };
 
 // Set default values to variables
-let selectedCarType: carTypes = carTypes.BRAND_NEW;
+let selectedCarType: CarTypes = CarTypes.BRAND_NEW;
 let selectedLeasePeriod: number = 12;
 let selectedCarValue: number = Math.pow(10, 5);
 let selectedDownPayment: number = 25;
@@ -35,6 +35,7 @@ let carValueSlider = document.getElementById(
 let downPaymentSlider = document.getElementById(
   "down-payment-slider"
 )! as HTMLInputElement;
+
 //Outputs
 let totalLeasingCostSpan = document.getElementById(
   "total-leasing-cost"
@@ -48,6 +49,14 @@ let monthlyInstallmentSpan = document.getElementById(
 let interestRateSpan = document.getElementById(
   "interest-rate"
 )! as HTMLSpanElement;
+
+// Errors
+let carValueInputErrorSpan = document.getElementById(
+  "car-value-input-error"
+) as HTMLSpanElement;
+let downPaymentInputErrorSpan = document.getElementById(
+  "down-payment-input-error"
+) as HTMLSpanElement;
 
 // Listeners
 carTypeDropdown.addEventListener("change", (e: any) => {
@@ -63,22 +72,24 @@ leasePeriodDropdown.addEventListener("change", (e: any) => {
 carValueInput.addEventListener("input", (e: any) => {
   let inputValue = +e.target.value;
   if (10000 > inputValue || 200000 < inputValue) {
-    console.log("invalid input");
+    activateError(Errors.carValueError);
     return;
   }
   selectedCarValue = +e.target.value;
   carValueSlider.value = "" + selectedCarValue;
+  disableError(Errors.carValueError);
   calculateLeasingDetails();
 });
 
 downPaymentInput.addEventListener("input", (e: any) => {
   let inputValue = +e.target.value;
   if (10 > inputValue || 50 < inputValue) {
-    console.log("invalid input");
+    activateError(Errors.downPaymentError);
     return;
   }
   selectedDownPayment = +e.target.value;
   downPaymentSlider.value = "" + selectedDownPayment;
+  disableError(Errors.downPaymentError);
   calculateLeasingDetails();
 });
 
@@ -117,4 +128,63 @@ function calculateLeasingDetails() {
   totalLeasingCostSpan.textContent = totalLeasingCost.toFixed(2);
 
   interestRateSpan.textContent = (annualInterestRate * 100).toFixed(2);
+}
+
+// Error handling
+// Helpers
+enum Errors {
+  carValueError,
+  downPaymentError,
+}
+
+const errorMessage = "Invalid input.";
+
+const errorActiveClassForSpan = "error-message-active";
+const errorDisabledClassForSpan = "error-message-disabled";
+
+const errorActiveClassForInput = "input-error";
+
+// Logic
+function activateError(err: Errors) {
+  let errorSpan: HTMLSpanElement;
+  let input: HTMLInputElement;
+  switch (err) {
+    case Errors.carValueError: {
+      errorSpan = carValueInputErrorSpan;
+      input = carValueInput;
+      break;
+    }
+    case Errors.downPaymentError: {
+      errorSpan = downPaymentInputErrorSpan;
+      input = downPaymentInput;
+      break;
+    }
+  }
+  errorSpan.textContent = errorMessage;
+  errorSpan.className = errorActiveClassForSpan;
+  if (input.className.split(" ")[1] === errorActiveClassForInput) return;
+  input.className += " " + errorActiveClassForInput;
+}
+
+function disableError(err: Errors) {
+  let errorSpan: HTMLSpanElement;
+  let input: HTMLInputElement;
+  switch (err) {
+    case Errors.carValueError: {
+      errorSpan = carValueInputErrorSpan;
+      input = carValueInput;
+      break;
+    }
+    case Errors.downPaymentError: {
+      errorSpan = downPaymentInputErrorSpan;
+      input = downPaymentInput;
+      break;
+    }
+  }
+  errorSpan.textContent = "";
+  errorSpan.className = errorDisabledClassForSpan;
+  let classNames = input.className.split(" ");
+  let poppedClass = classNames.pop();
+  if (poppedClass !== errorActiveClassForInput) return;
+  input.className = classNames.join(" ");
 }

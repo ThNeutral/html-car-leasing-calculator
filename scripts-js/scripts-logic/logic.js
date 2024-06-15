@@ -1,17 +1,17 @@
 "use strict";
 var _a;
 // Helpers
-var carTypes;
-(function (carTypes) {
-    carTypes[carTypes["BRAND_NEW"] = 0] = "BRAND_NEW";
-    carTypes[carTypes["USED"] = 1] = "USED";
-})(carTypes || (carTypes = {}));
+var CarTypes;
+(function (CarTypes) {
+    CarTypes[CarTypes["BRAND_NEW"] = 0] = "BRAND_NEW";
+    CarTypes[CarTypes["USED"] = 1] = "USED";
+})(CarTypes || (CarTypes = {}));
 var carTypeInterestRates = (_a = {},
-    _a[carTypes.BRAND_NEW] = 2.99,
-    _a[carTypes.USED] = 3.7,
+    _a[CarTypes.BRAND_NEW] = 2.99,
+    _a[CarTypes.USED] = 3.7,
     _a);
 // Set default values to variables
-var selectedCarType = carTypes.BRAND_NEW;
+var selectedCarType = CarTypes.BRAND_NEW;
 var selectedLeasePeriod = 12;
 var selectedCarValue = Math.pow(10, 5);
 var selectedDownPayment = 25;
@@ -28,6 +28,9 @@ var totalLeasingCostSpan = document.getElementById("total-leasing-cost");
 var downPaymentSpan = document.getElementById("down-payment");
 var monthlyInstallmentSpan = document.getElementById("monthly-installment");
 var interestRateSpan = document.getElementById("interest-rate");
+// Errors
+var carValueInputErrorSpan = document.getElementById("car-value-input-error");
+var downPaymentInputErrorSpan = document.getElementById("down-payment-input-error");
 // Listeners
 carTypeDropdown.addEventListener("change", function (e) {
     selectedCarType = e.target.selectedIndex;
@@ -40,21 +43,23 @@ leasePeriodDropdown.addEventListener("change", function (e) {
 carValueInput.addEventListener("input", function (e) {
     var inputValue = +e.target.value;
     if (10000 > inputValue || 200000 < inputValue) {
-        console.log("invalid input");
+        activateError(Errors.carValueError);
         return;
     }
     selectedCarValue = +e.target.value;
     carValueSlider.value = "" + selectedCarValue;
+    disableError(Errors.carValueError);
     calculateLeasingDetails();
 });
 downPaymentInput.addEventListener("input", function (e) {
     var inputValue = +e.target.value;
     if (10 > inputValue || 50 < inputValue) {
-        console.log("invalid input");
+        activateError(Errors.downPaymentError);
         return;
     }
     selectedDownPayment = +e.target.value;
     downPaymentSlider.value = "" + selectedDownPayment;
+    disableError(Errors.downPaymentError);
     calculateLeasingDetails();
 });
 carValueSlider.addEventListener("input", function (e) {
@@ -84,4 +89,62 @@ function calculateLeasingDetails() {
     var totalLeasingCost = monthlyInstallment * selectedLeasePeriod + downPayment;
     totalLeasingCostSpan.textContent = totalLeasingCost.toFixed(2);
     interestRateSpan.textContent = (annualInterestRate * 100).toFixed(2);
+}
+// Error handling
+// Helpers
+var Errors;
+(function (Errors) {
+    Errors[Errors["carValueError"] = 0] = "carValueError";
+    Errors[Errors["downPaymentError"] = 1] = "downPaymentError";
+})(Errors || (Errors = {}));
+var errorMessage = "Invalid input.";
+var errorActiveClassForSpan = "error-message-active";
+var errorDisabledClassForSpan = "error-message-disabled";
+var errorActiveClassForInput = "input-error";
+// Logic
+function activateError(err) {
+    var errorSpan;
+    var input;
+    switch (err) {
+        case Errors.carValueError: {
+            errorSpan = carValueInputErrorSpan;
+            input = carValueInput;
+            break;
+        }
+        case Errors.downPaymentError: {
+            errorSpan = downPaymentInputErrorSpan;
+            input = downPaymentInput;
+            break;
+        }
+    }
+    errorSpan.textContent = errorMessage;
+    errorSpan.className = errorActiveClassForSpan;
+    if (input.className.split(" ")[1] === errorActiveClassForInput)
+        return;
+    input.className += " " + errorActiveClassForInput;
+}
+function disableError(err) {
+    var errorSpan;
+    var input;
+    switch (err) {
+        case Errors.carValueError: {
+            errorSpan = carValueInputErrorSpan;
+            input = carValueInput;
+            break;
+        }
+        case Errors.downPaymentError: {
+            errorSpan = downPaymentInputErrorSpan;
+            input = downPaymentInput;
+            break;
+        }
+    }
+    errorSpan.textContent = "";
+    errorSpan.className = errorDisabledClassForSpan;
+    var classNames = input.className.split(" ");
+    console.log(classNames);
+    var poppedClass = classNames.pop();
+    if (poppedClass !== errorActiveClassForInput)
+        return;
+    console.log(classNames);
+    input.className = classNames.join(" ");
 }
