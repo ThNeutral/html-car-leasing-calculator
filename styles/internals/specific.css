@@ -1,0 +1,44 @@
+.modal {
+  padding: 20px;
+  padding-top: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 0px 5px 13px #aaa;
+}
+
+.input,
+.dropdown {
+  border-radius: 3px;
+  border: 1px solid rgba(200, 200, 200, 0.8);
+}
+
+.input {
+  height: 20px;
+  width: 260px;
+  padding: 10px;
+}
+
+.dropdown {
+  height: 40px;
+  width: 282px;
+  padding: 10px;
+}
+
+.horizontal-line {
+  margin: 10px auto;
+  width: calc(100% - 20px);
+  border-top: 1px black solid;
+}
+
+.vertical-line {
+  margin: 0 8px;
+  height: 54px;
+  border-left: 1px black solid;
+}
+
+.text-div {
+  width: 250px;
+}
+
+.details-text {
+  margin: 4px 0;
+}

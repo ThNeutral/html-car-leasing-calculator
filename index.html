@@ -1,13 +1,85 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="roboto-medium">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="./styles/index.css" />
     <title>Document</title>
   </head>
-  <body>
-    <div class="test"></div>
+  <body class="centered-horizontal centered-vertical">
+    <div class="modal column centered-horizontal">
+      <h1>Car Leasing Calculator</h1>
+      <form class="row">
+        <div class="column">
+          <label for="car-type-dropdown">Car Type:</label>
+          <select name="car-type-dropdown" class="dropdown">
+            <option name="brand-new">Brand New</option>
+            <option name="used">Used</option>
+          </select>
+          <br />
+          <label for="car-value-input">Car Value (€10,000 - €200,000):</label>
+          <input name="car-value-input" class="input" />
+          <br />
+          <input
+            name="down-payment-slider"
+            type="range"
+            min="10000"
+            max="200000"
+          />
+          <br class="show-on-mobile" />
+        </div>
+        <div class="column">
+          <label for="lease-period-dropdown">Lease Period (months):</label>
+          <select
+            id="lease-period-dropdown"
+            name="lease-period-dropdown"
+            class="dropdown"
+          ></select>
+          <br />
+          <label for="down-payment-input">Down Payment (10% - 50%):</label>
+          <input name="down-payment-input" class="input" />
+          <br />
+          <input
+            name="down-payment-slider"
+            type="range"
+            min="10"
+            max="50"
+            step="5"
+          />
+          <br class="show-on-mobile" />
+        </div>
+      </form>
+      <br class="hide-on-mobile"/>
+      <div class="horizontal-line"></div>
+      <h1>Leasing Details</h1>
+      <div class="row centered-vertical-space-evenly">
+        <div class="column text-div">
+          <a class="details-text"
+            >Total Leasing Cost: <span id="total-leasing-cost"></span
+          ></a>
+          <a class="details-text"
+            >Down Payment: <span id="down-payment"></span
+          ></a>
+        </div>
+        <div class="vertical-line hide-on-mobile"></div>
+        <br class="show-on-mobile" />
+        <div class="column text-div">
+          <a class="details-text"
+            >Monthly Installment:
+            <span id="monthly-installment">3434333</span></a
+          >
+          <a class="details-text"
+            >Interest Rate: <span id="interest-rate"></span
+          ></a>
+        </div>
+      </div>
+    </div>
   </body>
   <script src="./scripts-js/index.js"></script>
 </html>
