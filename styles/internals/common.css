@@ -3,6 +3,13 @@
   align-items: center;
 }
 
+@media (max-width: 720px) {
+  body.centered-horizontal {
+    align-items: start;
+  }
+}
+
+
 .centered-vertical {
   display: flex;
   justify-content: center;
