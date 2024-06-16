@@ -141,10 +141,8 @@ function disableError(err) {
     errorSpan.textContent = "";
     errorSpan.className = errorDisabledClassForSpan;
     var classNames = input.className.split(" ");
-    console.log(classNames);
     var poppedClass = classNames.pop();
     if (poppedClass !== errorActiveClassForInput)
         return;
-    console.log(classNames);
     input.className = classNames.join(" ");
 }
